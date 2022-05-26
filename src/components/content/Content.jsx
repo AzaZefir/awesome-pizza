@@ -23,6 +23,7 @@ const Content = ({ sliderCard }) => {
 
   const onSelectCategory = (index) => {
     setCategory(index);
+
   };
 
   return (

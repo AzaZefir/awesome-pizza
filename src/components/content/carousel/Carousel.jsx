@@ -15,7 +15,7 @@ const Carousel = ({ sliderCard }) => {
     <div>
       <Slider {...settings} className="slider__wrapper">
         {sliderCard.map((slide) => (
-          <div key={slide.id}>
+          <div key={slide.id} className='slider__img'>
             <img src={slide.img} alt="First slide" />
           </div>
         ))}
