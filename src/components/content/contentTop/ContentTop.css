@@ -1,0 +1,46 @@
+.categories {
+  flex: 1;
+  max-width: 80%;
+  overflow-x: scroll;
+
+}
+.categories::-webkit-scrollbar {
+  width: 12px;               /* width of the entire scrollbar */
+}
+
+@media (max-width: 768px) {
+  .categories {
+    max-width: 100%;
+    margin-bottom: 30px;
+  }
+}
+.categories ul {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.categories ul li {
+  background-color: #f9f9f9;
+  padding: 13px 30px;
+  border-radius: 30px;
+  margin-right: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  -webkit-transition: background-color 0.1s ease-in-out;
+  transition: background-color 0.1s ease-in-out;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.categories ul li:hover {
+  background-color: #f4f4f4;
+}
+.categories ul li:active {
+  background-color: #ececec;
+}
+.categories ul li.active {
+  background-color: #282828;
+  color: #fff;
+}
