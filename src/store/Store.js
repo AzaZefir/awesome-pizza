@@ -1,10 +1,12 @@
 // import { combineReducers, createStore } from 'redux';
-// import { pizzasReducer } from './reducers/Pizzas';
-// import { filtersReducer } from './reducers/Filters';
+// import CardReducer from './reducers/CardReducer';
+// // import { pizzasReducer } from './reducers/Pizzas';
+// // import { filtersReducer } from './reducers/Filters';
 
 // const reducers = combineReducers({
-//   pizzas: pizzasReducer,
-//   filters: filtersReducer,
+// //   pizzas: pizzasReducer,
+// //   filters: filtersReducer,
+//     cart:CardReducer
 // });
 
 // export const store = createStore(

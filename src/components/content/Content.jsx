@@ -5,15 +5,15 @@ import Carousel from './carousel/Carousel';
 import ContentTop from './contentTop/ContentTop';
 import SortPopup from './sortPopup/SortPopup';
 
-const Content = ({ sliderCard }) => {
+const Content = ({ sliderCard, onAdd, order }) => {
   const [category, setCategory] = useState(null);
 
   const [pizzasFilter, setPizzaFilter] = useState(pizzasData);
 
   const filterResult = (catItem) => {
     if (catItem === '') {
-      setPizzaFilter(pizzasData)
-      return
+      setPizzaFilter(pizzasData);
+      return;
     }
     const result = pizzasData.filter((curData) => {
       return curData.category === catItem;
@@ -23,7 +23,6 @@ const Content = ({ sliderCard }) => {
 
   const onSelectCategory = (index) => {
     setCategory(index);
-
   };
 
   return (
@@ -34,6 +33,7 @@ const Content = ({ sliderCard }) => {
           <ContentTop
             filterResult={filterResult}
             onClickItem={onSelectCategory}
+            category={category}
             items={['Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые']}
           />
           <SortPopup
@@ -47,7 +47,7 @@ const Content = ({ sliderCard }) => {
         <h2 className="content__title">Все пиццы</h2>
         <div className="content__items">
           {pizzasFilter.map((pizza) => (
-            <PizzaCard {...pizza} key={pizza.id} />
+            <PizzaCard {...pizza} key={pizza.id} pizza={pizza} onAdd={onAdd} order={order} />
           ))}
         </div>
       </div>

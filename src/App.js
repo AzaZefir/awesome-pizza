@@ -9,11 +9,40 @@ import { pizzasInBusket, sliderCard, pizzasData } from './data/Data';
 
 import React from 'react';
 
-
 function App() {
   const [pizzas, setPizzas] = useState(pizzasData);
 
   const [order, setOrder] = useState([]);
+
+  const addToOrder = (product) => {
+    const exist = order.find((element) => element.id === product.id);
+    if (exist) {
+      setOrder(
+        order.map((element) =>
+          element.id === product.id ? { ...exist, total: exist.total + 1 } : element,
+        ),
+      );
+    } else {
+      setOrder([...order, { ...product, total: 1 }]);
+    }
+
+    // setOrder([...order, product])
+  };
+
+  const onRemove = (product) => {
+    // setOrder(order.filter((p) => p.id !== product.id));
+
+    const exist = order.find((element) => element.id === product.id);
+    if (exist.total === 1) {
+      setOrder(order.filter((element) => element.id !== product.id));
+    } else {
+      setOrder(
+        order.map((element) =>
+          element.id === product.id ? { ...exist, total: exist.total - 1 } : element,
+        ),
+      );
+    }
+  };
 
   return (
     <div className="wrapper">
@@ -28,11 +57,22 @@ function App() {
               pizzas={pizzas}
               sliderCard={sliderCard}
               order={order}
+              onAdd={addToOrder}
               setOrder={setOrder}
             />
           }
         />
-        <Route path="/busket" element={<Busket pizzasInBusket={pizzasInBusket} />} />
+        <Route
+          path="/busket"
+          element={
+            <Busket
+              order={order}
+              pizzasInBusket={pizzasInBusket}
+              onAdd={addToOrder}
+              onRemove={onRemove}
+            />
+          }
+        />
       </Routes>
     </div>
   );
@@ -40,16 +80,14 @@ function App() {
 
 export default App;
 
-
-  //   useEffect(() => {
-  //     axios.get('http://localhost:3000/db.json').then(({ data }) => {
-  //       setPizzas(data.pizzas);
-  //     });
-  //     // fetch('http://localhost:3000/db.json').then((response) =>
-  //     //   response.json().then((json) => setPizzas(json.pizzas)),
-  //     // );
-  //   }, []);
-
+//   useEffect(() => {
+//     axios.get('http://localhost:3000/db.json').then(({ data }) => {
+//       setPizzas(data.pizzas);
+//     });
+//     // fetch('http://localhost:3000/db.json').then((response) =>
+//     //   response.json().then((json) => setPizzas(json.pizzas)),
+//     // );
+//   }, []);
 
 // export const Appp = () => {
 //   const [count, setCount] = useState(0)

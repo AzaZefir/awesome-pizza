@@ -4,7 +4,13 @@ import { HeaderButtonSvg } from '../../assets/svg/Svg';
 import Button from '../../common/Button';
 import Logo from './../../assets/img/pizza-logo.svg';
 
-const Header = () => {
+const Header = ({ order }) => {
+  let totalPrice = 0;
+  order.forEach((el) => (totalPrice += Number.parseFloat(el.price)));
+
+  let totalCount = 0;
+  order.forEach((el) => (totalCount += Number.parseFloat(el.total)));
+
   return (
     <div className="header">
       <div className="container">
@@ -15,16 +21,15 @@ const Header = () => {
               <h1>№One Pizza</h1>
               <p>самая вкусная пицца во вселенной</p>
             </div>
-            
           </div>
         </Link>
         <div className="header__cart">
           <Link to="/busket">
             <Button className="button--cart">
-              <span>520 сом</span>
+              <span>{totalPrice} сом</span>
               <div className="button__delimiter"></div>
-              <HeaderButtonSvg/>
-              <span>3</span>
+              <HeaderButtonSvg />
+              <span>{totalCount} шт.</span>
             </Button>
           </Link>
         </div>

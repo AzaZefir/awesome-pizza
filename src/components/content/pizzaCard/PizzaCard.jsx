@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
 import { CardAddPlusSvg } from '../../../assets/svg/Svg';
-const PizzaCard = ({ name, types, price, sizes, imageUrl }) => {
+
+const PizzaCard = ({ name, types, price, sizes, imageUrl, onAdd, pizza, order }) => {
   const availableNames = ['тонкое', 'традиционное'];
   const availableSizes = [26, 30, 40];
   const [activeTypes, setActiveTypes] = useState(types[0]);
@@ -11,7 +12,7 @@ const PizzaCard = ({ name, types, price, sizes, imageUrl }) => {
     setActiveTypes(index);
   };
   const onSelectSize = (index) => {
-    setActiveSizes(index)
+    setActiveSizes(index);
   };
 
   return (
@@ -33,7 +34,7 @@ const PizzaCard = ({ name, types, price, sizes, imageUrl }) => {
           ))}
         </ul>
         <ul>
-        {availableSizes.map((size, index) => (
+          {availableSizes.map((size, index) => (
             <li
               key={size}
               onClick={() => onSelectSize(index)}
@@ -46,10 +47,10 @@ const PizzaCard = ({ name, types, price, sizes, imageUrl }) => {
           ))}
         </ul>
       </div>
-      <div className="pizza-block__bottom">
+      <div onClick={() => onAdd(pizza)} className="pizza-block__bottom">
         <div className="pizza-block__price">{price} сом</div>
         <div className="button button--outline button--add">
-          <CardAddPlusSvg/>
+          <CardAddPlusSvg />
           <span>Добавить</span>
           <i>1</i>
         </div>

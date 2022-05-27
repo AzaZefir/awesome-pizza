@@ -5,7 +5,7 @@
   background-size: cover;
   border-radius: 20px;
 }
-.slider__img img {
+/* .slider__img img {
   -webkit-transform: scale(1.6);
   transform: scale(0.9);
   -webkit-transition: 0.3s ease-in-out;
@@ -14,7 +14,7 @@
 .slider__img:hover img {
   -webkit-transform: scale(1);
   transform: scale(1);
-}
+} */
 .slick-prev:before,
 .slick-next:before {
   font-size: 22px !important;
