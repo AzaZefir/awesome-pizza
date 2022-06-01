@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { pizzasData } from '../../data/Data';
 import PizzaCard from '../content/pizzaCard/PizzaCard';
-import Carousel from './carousel/Carousel';
-import ContentTop from './contentTop/ContentTop';
+import Categories from './categories/Categories';
 import SortPopup from './sortPopup/SortPopup';
+import SliderReact from './slider/Slider';
 
-const Content = ({ sliderCard, onAdd, order }) => {
+const Content = ({ sliderCard, onAdd, order, setPizzas }) => {
   const [category, setCategory] = useState(null);
-
   const [pizzasFilter, setPizzaFilter] = useState(pizzasData);
+  const [sortType, setSortType] = useState({
+    type: 'popular',
+    order: 'desc',
+  });
 
   const filterResult = (catItem) => {
     if (catItem === '') {
@@ -25,22 +28,31 @@ const Content = ({ sliderCard, onAdd, order }) => {
     setCategory(index);
   };
 
+  const onSortPizzas = (type) => {
+    setSortType(type);
+    setPizzas([...pizzasFilter].sort((a, b) => a[type]?.localeCompare(b[type])));
+    console.log(type);
+  };
+
   return (
     <div className="content">
       <div className="container">
-        <Carousel sliderCard={sliderCard} />
+        <SliderReact sliderCard={sliderCard} />
         <div className="content__top">
-          <ContentTop
+          <Categories
             filterResult={filterResult}
             onClickItem={onSelectCategory}
             category={category}
             items={['Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые']}
           />
           <SortPopup
+            activeSortType={sortType.type}
+            onSortPizzas={onSortPizzas}
+            sortType={sortType}
             items={[
-              { name: 'Популярности', type: 'popular' },
-              { name: 'Цене', type: 'price' },
-              { name: 'Алфавиту', type: 'alphabet' },
+              { name: 'популярности', type: 'popular', order: 'desc' },
+              { name: 'цене', type: 'price', order: 'desc' },
+              { name: 'алфавит', type: 'name', order: 'asc' },
             ]}
           />
         </div>

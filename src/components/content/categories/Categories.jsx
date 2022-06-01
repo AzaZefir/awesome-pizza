@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ContentTop = ({ items, onClickItem, filterResult }) => {
+const Categories = ({ items, onClickItem, filterResult }) => {
   const [activeItem, setActiveItem] = useState('');
 
   const onSelectItem = (index) => {
@@ -28,7 +28,7 @@ const ContentTop = ({ items, onClickItem, filterResult }) => {
   );
 };
 
-export default ContentTop;
+export default Categories;
 
 // class ContentTop extends React.Component {
 //   state = {

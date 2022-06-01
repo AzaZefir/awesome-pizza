@@ -1,7 +1,7 @@
 import React from 'react';
 import Slider from 'react-slick/lib/slider';
 
-const Carousel = ({ sliderCard }) => {
+const SliderReact = ({ sliderCard }) => {
   const settings = {
     infinite: true,
     speed: 1000,
@@ -15,7 +15,7 @@ const Carousel = ({ sliderCard }) => {
     <div>
       <Slider {...settings} className="slider__wrapper">
         {sliderCard.map((slide) => (
-          <div key={slide.id} className='slider__img'>
+          <div key={slide.id} className="slider__img">
             <img src={slide.img} alt="First slide" />
           </div>
         ))}
@@ -24,4 +24,4 @@ const Carousel = ({ sliderCard }) => {
   );
 };
 
-export default Carousel;
+export default SliderReact;

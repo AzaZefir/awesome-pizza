@@ -17,6 +17,10 @@ const Busket = ({ order, onAdd, onRemove }) => {
   let totalCount = 0;
   order.forEach((el) => (totalCount += Number.parseFloat(el.total)));
 
+  const onPay = (items) => {
+    alert('Вы сделали заказ', items)
+  }
+
   return (
     <div className="content">
       {order.length !== 0 ? (
@@ -82,7 +86,7 @@ const Busket = ({ order, onAdd, onRemove }) => {
                   <BackButtonSvg />
                   <span>Вернуться назад</span>
                 </NavLink>
-                <div className="button pay-btn">
+                <div className="button pay-btn" onClick={onPay}>
                   <span>Оплатить сейчас</span>
                 </div>
               </div>
