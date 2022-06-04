@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { HeaderButtonSvg } from '../../assets/svg/Svg';
-import Button from '../../common/Button';
+import Button from '../../common/button/Button';
 import Logo from './../../assets/img/pizza-logo.svg';
 
 const Header = ({ order }) => {

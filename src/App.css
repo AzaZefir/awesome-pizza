@@ -3,10 +3,10 @@
 @import './components/content/Content.css';
 @import './components/busket/Busket.css';
 @import './components/busket/busketEmpty/BusketEmpty.css';
-@import './common/Button.css';
+@import './common/button/Button.css';
 @import './components/content/sortPopup/SortPopup.css';
 @import './components/content/pizzaCard/PizzaCard.css';
-@import './components/content/slider/Slider.css';
+@import './common/slider/Slider.css';
 
 @import '~slick-carousel/slick/slick.css';
 @import '~slick-carousel/slick/slick-theme.css';

@@ -44,16 +44,14 @@ const SortPopup = React.memo(function SortPopup({ items, activeSortType, onSortP
       {visiblePopup && (
         <div className="sort__popup">
           <ul>
-            {items &&
-              items.map((obj, index) => (
-                <li
-                  className={activeSortType === obj.type ? 'active' : ''}
-                  onClick={() => onSelectItem(obj)}
-                  key={`${obj.type}_${index}`}
-                >
-                  {obj.name}
-                </li>
-              ))}
+            {items.map((obj, index) => (
+              <li
+                className={activeSortType === obj.type ? 'active' : ''}
+                onClick={() => onSelectItem(obj)}
+                key={`${obj.type}_${index}`}>
+                {obj.name}
+              </li>
+            ))}
           </ul>
         </div>
       )}

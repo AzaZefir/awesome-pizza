@@ -3,15 +3,23 @@ import { pizzasData } from '../../data/Data';
 import PizzaCard from '../content/pizzaCard/PizzaCard';
 import Categories from './categories/Categories';
 import SortPopup from './sortPopup/SortPopup';
-import SliderReact from './slider/Slider';
+import SliderReact from './../../common/slider/Slider';
 
-const Content = ({ sliderCard, onAdd, order, setPizzas }) => {
+const Content = ({ sliderCard, onAdd, order, setPizzas, pizzas }) => {
   const [category, setCategory] = useState(null);
   const [pizzasFilter, setPizzaFilter] = useState(pizzasData);
   const [sortType, setSortType] = useState({
     type: 'popular',
     order: 'desc',
   });
+
+  // const sortedPizzas = useMemo(() => {
+  //   console.log('vcvbnm');
+  //   if (sortType) {
+  //     return [...pizzas].sort((a, b) => a[sortType]?.localeCompare(b[sortType]))
+  //   }
+  //   return pizzas
+  // }, [pizzas, sortType])
 
   const filterResult = (catItem) => {
     if (catItem === '') {
@@ -29,9 +37,11 @@ const Content = ({ sliderCard, onAdd, order, setPizzas }) => {
   };
 
   const onSortPizzas = (type) => {
-    setSortType(type);
-    setPizzas([...pizzasFilter].sort((a, b) => a[type]?.localeCompare(b[type])));
     console.log(type);
+    setSortType(type);
+    const sortedPizzas = pizzas.sort((a, b) => a[type.type]?.localeCompare(b[type.type]));
+    setPizzas(sortedPizzas);
+    console.log(sortedPizzas);
   };
 
   return (
