@@ -4,10 +4,12 @@ import PizzaCard from '../content/pizzaCard/PizzaCard';
 import Categories from './categories/Categories';
 import SortPopup from './sortPopup/SortPopup';
 import SliderReact from './../../common/slider/Slider';
+import LoadingSkeleton from '../../common/loaderSkeleton/LoaderSkeleton';
 
 const Content = ({ sliderCard, onAdd, order, setPizzas, pizzas }) => {
   const [category, setCategory] = useState(null);
   const [pizzasFilter, setPizzaFilter] = useState(pizzasData);
+  const [isLoaded, setLoaded] = useState(true);
   const [sortType, setSortType] = useState({
     type: 'popular',
     order: 'desc',
@@ -68,9 +70,13 @@ const Content = ({ sliderCard, onAdd, order, setPizzas, pizzas }) => {
         </div>
         <h2 className="content__title">Все пиццы</h2>
         <div className="content__items">
-          {pizzasFilter.map((pizza) => (
-            <PizzaCard {...pizza} key={pizza.id} pizza={pizza} onAdd={onAdd} order={order} />
-          ))}
+          {isLoaded
+            ? pizzasFilter.map((pizza) => (
+                <PizzaCard {...pizza} key={pizza.id} pizza={pizza} onAdd={onAdd} order={order} />
+              ))
+            : Array(12)
+                .fill(0)
+                .map((_, index) => <LoadingSkeleton key={index} />)}
         </div>
       </div>
     </div>
