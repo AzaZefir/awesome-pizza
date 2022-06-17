@@ -1,29 +1,46 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import {
-  BackButtonSvg,
-  ButtonCircleSvg,
-  ClearBusketSvg,
-  HeaderButtonSvg,
-  MinusSvg,
-  PlusSvg,
-} from '../../assets/svg/Svg';
+import { BackButtonSvg, ClearBusketSvg, HeaderButtonSvg } from '../../assets/svg/Svg';
+import { clearCart, minusCartItem, plusCartItem, removeCartItem } from '../../store/actions/CardActions';
 import BusketEmpty from './busketEmpty/BusketEmpty';
+import CartItem from './cartItem.jsx/CartItem';
 
-const Busket = ({ order, onAdd, onRemove }) => {
-  let totalPrice = 0;
-  order.forEach((el) => (totalPrice += Number.parseFloat(el.price)));
+const Busket = () => {
+  const dispatch = useDispatch();
 
-  let totalCount = 0;
-  order.forEach((el) => (totalCount += Number.parseFloat(el.total)));
+  const { totalPrice, totalCount, items } = useSelector(({ cart }) => cart);
+ 
+  const addedPizzas = Object.keys(items).map((key) => {
+    return items[key].items[0];
+  });
+  const onClearCart = () => {
+    if (window.confirm('Вы действительно хотите очистить корзину?')) {
+      dispatch(clearCart());
+    }
+  };
 
-  const onPay = (items) => {
-    alert('Вы сделали заказ', items)
-  }
+  const onRemoveItem = (id) => {
+    if (window.confirm('Вы действительно хотите удалить?')) {
+      dispatch(removeCartItem(id));
+    }
+  };
+
+  const onPlusItem = (id) => {
+    dispatch(plusCartItem(id));
+  };
+
+  const onMinusItem = (id) => {
+    dispatch(minusCartItem(id));
+  };
+
+  const onClickOrder = () => {
+    console.log('ВАШ ЗАКАЗ', items);
+  };
 
   return (
     <div className="content">
-      {order.length !== 0 ? (
+      {totalCount ? (
         <div className="container container--cart">
           <div className="cart">
             <div className="cart__top">
@@ -31,45 +48,26 @@ const Busket = ({ order, onAdd, onRemove }) => {
                 <HeaderButtonSvg />
                 Корзина
               </h2>
-              <div className="cart__clear" onClick={onRemove}>
+              <div className="cart__clear" onClick={onClearCart}>
                 <ClearBusketSvg />
                 <span>Очистить корзину</span>
               </div>
             </div>
-            <div className="content__items">
-              {order.map((pizzaInBusket) => (
-                <div className="cart__item" key={pizzaInBusket.id}>
-                  <div className="cart__item-img">
-                    <img className="pizza-block__image" src={pizzaInBusket.imageUrl} alt="Pizza" />
-                  </div>
-                  <div className="cart__item-info">
-                    <h3>{pizzaInBusket.name}</h3>
-                    <p>{pizzaInBusket.size}</p>
-                  </div>
-                  <div className="cart__item-count">
-                    <div
-                      className="button button--outline button--circle cart__item-count-minus"
-                      onClick={() => onRemove(pizzaInBusket)}>
-                      <MinusSvg />
-                    </div>
-                    <b>{pizzaInBusket.total}</b>
-                    <div
-                      className="button button--outline button--circle cart__item-count-plus"
-                      onClick={() => onAdd(pizzaInBusket)}>
-                      <PlusSvg />
-                    </div>
-                  </div>
-                  <div className="cart__item-price">
-                    <b>{pizzaInBusket.price}</b>
-                  </div>
-                  <div className="cart__item-remove" onClick={() => onRemove(pizzaInBusket)}>
-                    <div className="button button--outline button--circle">
-                      <ButtonCircleSvg />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            {addedPizzas.map((obj) => (
+              <CartItem
+                key={obj.id}
+                id={obj.id}
+                name={obj.name}
+                type={obj.type}
+                size={obj.size}
+                imageUrl={obj.imageUrl}
+                totalPrice={items[obj.id].totalPrice}
+                totalCount={items[obj.id].items.length}
+                onRemove={onRemoveItem}
+                onMinus={onMinusItem}
+                onPlus={onPlusItem}
+              />
+            ))}
             <div className="cart__bottom">
               <div className="cart__bottom-details">
                 <span>
@@ -86,7 +84,7 @@ const Busket = ({ order, onAdd, onRemove }) => {
                   <BackButtonSvg />
                   <span>Вернуться назад</span>
                 </NavLink>
-                <div className="button pay-btn" onClick={onPay}>
+                <div className="button pay-btn" onClick={onClickOrder}>
                   <span>Оплатить сейчас</span>
                 </div>
               </div>

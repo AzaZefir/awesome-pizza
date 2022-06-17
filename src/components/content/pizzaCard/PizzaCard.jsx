@@ -2,17 +2,38 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 import { CardAddPlusSvg } from '../../../assets/svg/Svg';
 
-const PizzaCard = ({ name, types, price, sizes, imageUrl, onAdd, pizza, order }) => {
-  const availableNames = ['тонкое', 'традиционное'];
+const PizzaCard = ({
+  id,
+  name,
+  types,
+  price,
+  sizes,
+  imageUrl,
+  onClickAddPizza,
+  addedCount,
+}) => {
+  const availableTypes = ['тонкое', 'традиционное'];
   const availableSizes = [26, 30, 40];
   const [activeTypes, setActiveTypes] = useState(types[0]);
-  const [activeSizes, setActiveSizes] = useState(sizes[0]);
+  const [activeSizes, setActiveSizes] = useState(0);
 
   const onSelectType = (index) => {
     setActiveTypes(index);
+    console.log(index);
   };
   const onSelectSize = (index) => {
     setActiveSizes(index);
+  };
+  const onAddPizza = () => {
+    const obj = {
+      id,
+      name,
+      imageUrl,
+      price,
+      size: availableSizes[activeSizes],
+      type: availableTypes[activeTypes],
+    };
+    onClickAddPizza(obj);
   };
 
   return (
@@ -21,7 +42,7 @@ const PizzaCard = ({ name, types, price, sizes, imageUrl, onAdd, pizza, order })
       <h4 className="pizza-block__title">{name}</h4>
       <div className="pizza-block__selector">
         <ul>
-          {availableNames.map((type, index) => (
+          {availableTypes.map((type, index) => (
             <li
               key={index}
               onClick={() => onSelectType(index)}
@@ -47,12 +68,12 @@ const PizzaCard = ({ name, types, price, sizes, imageUrl, onAdd, pizza, order })
           ))}
         </ul>
       </div>
-      <div onClick={() => onAdd(pizza)} className="pizza-block__bottom">
-        <div className="pizza-block__price">{price} сом</div>
+      <div onClick={onAddPizza} className="pizza-block__bottom">
+        <div className="pizza-block__price">от {price} сом</div>
         <div className="button button--outline button--add">
           <CardAddPlusSvg />
           <span>Добавить</span>
-          <i>1</i>
+          {addedCount && <i>{addedCount}</i>}
         </div>
       </div>
     </div>

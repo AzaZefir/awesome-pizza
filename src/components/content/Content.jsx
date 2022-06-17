@@ -1,34 +1,45 @@
-import React, { useState } from 'react';
-import { pizzasData } from '../../data/Data';
+// import React, { useState } from 'react';
+// import { pizzasData } from '../../data/Data';
 import PizzaCard from '../content/pizzaCard/PizzaCard';
 import Categories from './categories/Categories';
 import SortPopup from './sortPopup/SortPopup';
 import SliderReact from './../../common/slider/Slider';
 import LoadingSkeleton from '../../common/loaderSkeleton/LoaderSkeleton';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPizzas, setPizzas } from '../../store/actions/PizzasAction';
+import { useEffect, useState } from 'react';
 
-const Content = ({ sliderCard, onAdd, order, setPizzas, pizzas }) => {
+const Content = () => {
+  const dispatch = useDispatch();
+
+  const items = useSelector(({ pizzas }) => pizzas.items);
+  const cartItems = useSelector(({ cart }) => cart.items);
+  const isLoaded = useSelector(({ pizzas }) => pizzas.isLoaded);
+
   const [category, setCategory] = useState(null);
-  const [pizzasFilter, setPizzaFilter] = useState(pizzasData);
-  const [isLoaded, setLoaded] = useState(true);
+  const [pizzasFilter, setPizzaFilter] = useState(items);
   const [sortType, setSortType] = useState({
-    type: 'popular',
+    type: 'rating',
     order: 'desc',
   });
 
-  // const sortedPizzas = useMemo(() => {
-  //   console.log('vcvbnm');
-  //   if (sortType) {
-  //     return [...pizzas].sort((a, b) => a[sortType]?.localeCompare(b[sortType]))
-  //   }
-  //   return pizzas
-  // }, [pizzas, sortType])
+  useEffect(() => {
+    dispatch(fetchPizzas(sortType, category));
+  }, [category, dispatch, sortType]);
+
+  const handleAddPizzaToCart = (obj) => {
+    dispatch({
+      type: 'ADD_PIZZA_CART',
+      payload: obj,
+    });
+  };
 
   const filterResult = (catItem) => {
     if (catItem === '') {
-      setPizzaFilter(pizzasData);
+      setPizzaFilter(items);
       return;
     }
-    const result = pizzasData.filter((curData) => {
+    const result = items.filter((curData) => {
       return curData.category === catItem;
     });
     setPizzaFilter(result);
@@ -39,17 +50,15 @@ const Content = ({ sliderCard, onAdd, order, setPizzas, pizzas }) => {
   };
 
   const onSortPizzas = (type) => {
-    console.log(type);
     setSortType(type);
-    const sortedPizzas = pizzas.sort((a, b) => a[type.type]?.localeCompare(b[type.type]));
+    const sortedPizzas = pizzasFilter.sort((a, b) => a[type.type]?.localeCompare(b[type.type]));
     setPizzas(sortedPizzas);
-    console.log(sortedPizzas);
   };
 
   return (
     <div className="content">
       <div className="container">
-        <SliderReact sliderCard={sliderCard} />
+        <SliderReact />
         <div className="content__top">
           <Categories
             filterResult={filterResult}
@@ -60,10 +69,9 @@ const Content = ({ sliderCard, onAdd, order, setPizzas, pizzas }) => {
           <SortPopup
             activeSortType={sortType.type}
             onSortPizzas={onSortPizzas}
-            sortType={sortType}
             items={[
-              { name: 'популярности', type: 'popular', order: 'desc' },
-              { name: 'цене', type: 'price', order: 'desc' },
+              { name: 'популярности', type: 'rating', order: 'desc' },
+              { name: 'цене', type: 'priceSort', order: 'desc' },
               { name: 'алфавит', type: 'name', order: 'asc' },
             ]}
           />
@@ -71,8 +79,13 @@ const Content = ({ sliderCard, onAdd, order, setPizzas, pizzas }) => {
         <h2 className="content__title">Все пиццы</h2>
         <div className="content__items">
           {isLoaded
-            ? pizzasFilter.map((pizza) => (
-                <PizzaCard {...pizza} key={pizza.id} pizza={pizza} onAdd={onAdd} order={order} />
+            ? filterResult.map((obj) => (
+                <PizzaCard
+                  onClickAddPizza={handleAddPizzaToCart}
+                  key={obj.id}
+                  addedCount={cartItems[obj.id] && cartItems[obj.id].items.length}
+                  {...obj}
+                />
               ))
             : Array(12)
                 .fill(0)

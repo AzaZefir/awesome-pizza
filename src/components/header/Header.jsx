@@ -1,15 +1,18 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { HeaderButtonSvg } from '../../assets/svg/Svg';
 import Button from '../../common/button/Button';
 import Logo from './../../assets/img/pizza-logo.svg';
 
 const Header = ({ order }) => {
-  let totalPrice = 0;
-  order.forEach((el) => (totalPrice += Number.parseFloat(el.price)));
+  const { totalPrice, totalCount } = useSelector(({ cart }) => cart);
 
-  let totalCount = 0;
-  order.forEach((el) => (totalCount += Number.parseFloat(el.total)));
+  // let totalPrice = 0;
+  // order.forEach((el) => (totalPrice += Number.parseFloat(el.price)));
+
+  // let totalCount = 0;
+  // order.forEach((el) => (totalCount += Number.parseFloat(el.total)));
 
   return (
     <div className="header">
@@ -26,10 +29,10 @@ const Header = ({ order }) => {
         <div className="header__cart">
           <Link to="/busket">
             <Button className="button--cart">
-              <span>{totalPrice} сом</span>
+              <span> {totalPrice} сом</span>
               <div className="button__delimiter"></div>
               <HeaderButtonSvg />
-              <span>{totalCount} шт.</span>
+              <span> {totalCount} шт.</span>
             </Button>
           </Link>
         </div>

@@ -1,7 +1,8 @@
 import React from 'react';
 import Slider from 'react-slick/lib/slider';
+import { sliderCard } from '../../data/Data';
 
-const SliderReact = ({ sliderCard }) => {
+const SliderReact = () => {
   const settings = {
     infinite: true,
     speed: 1000,
