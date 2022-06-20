@@ -7,7 +7,8 @@ import SliderReact from './../../common/slider/Slider';
 import LoadingSkeleton from '../../common/loaderSkeleton/LoaderSkeleton';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchPizzas, setPizzas } from '../../store/actions/PizzasAction';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { setCategory, setSortBy } from '../../store/actions/filtersAction';
 
 const Content = () => {
   const dispatch = useDispatch();
@@ -16,16 +17,29 @@ const Content = () => {
   const cartItems = useSelector(({ cart }) => cart.items);
   const isLoaded = useSelector(({ pizzas }) => pizzas.isLoaded);
 
-  const [category, setCategory] = useState(null);
-  const [pizzasFilter, setPizzaFilter] = useState(items);
-  const [sortType, setSortType] = useState({
-    type: 'rating',
-    order: 'desc',
-  });
+  // const [category, setCategory] = useState(null);
+  // const [pizzasFilter, setPizzaFilter] = useState(items);
+  // const [sortType, setSortType] = useState({
+  //   type: 'rating',
+  //   order: 'desc',
+  // });
+
+  const { category, sortBy } = useSelector(({ filters }) => filters);
 
   useEffect(() => {
-    dispatch(fetchPizzas(sortType, category));
-  }, [category, dispatch, sortType]);
+    dispatch(fetchPizzas(sortBy, category));
+  }, [category, dispatch, sortBy]);
+
+  const onSelectCategory = useCallback((index) => {
+    dispatch(setCategory(index));
+  }, [dispatch]);
+
+  const onSelectSortType = useCallback((type) => {
+    dispatch(setSortBy(type));
+  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(fetchPizzas(sortBy, category));
+  // }, [category, dispatch, sortBy]);
 
   const handleAddPizzaToCart = (obj) => {
     dispatch({
@@ -34,26 +48,26 @@ const Content = () => {
     });
   };
 
-  const filterResult = (catItem) => {
-    if (catItem === '') {
-      setPizzaFilter(items);
-      return;
-    }
-    const result = items.filter((curData) => {
-      return curData.category === catItem;
-    });
-    setPizzaFilter(result);
-  };
+  // const filterResult = (catItem) => {
+  //   if (catItem === '') {
+  //     setPizzaFilter(items);
+  //     return;
+  //   }
+  //   const result = items.filter((curData) => {
+  //     return curData.category === catItem;
+  //   });
+  //   setPizzaFilter(result);
+  // };
 
-  const onSelectCategory = (index) => {
-    setCategory(index);
-  };
+  // const onSelectCategory = (index) => {
+  //   setCategory(index);
+  // };
 
-  const onSortPizzas = (type) => {
-    setSortType(type);
-    const sortedPizzas = pizzasFilter.sort((a, b) => a[type.type]?.localeCompare(b[type.type]));
-    setPizzas(sortedPizzas);
-  };
+  // const onSortPizzas = (type) => {
+  //   setSortType(type);
+  //   const sortedPizzas = pizzasFilter.sort((a, b) => a[type.type]?.localeCompare(b[type.type]));
+  //   setPizzas(sortedPizzas);
+  // };
 
   return (
     <div className="content">
@@ -61,17 +75,17 @@ const Content = () => {
         <SliderReact />
         <div className="content__top">
           <Categories
-            filterResult={filterResult}
+            // filterResult={filterResult}
             onClickItem={onSelectCategory}
             category={category}
             items={['Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые']}
           />
           <SortPopup
-            activeSortType={sortType.type}
-            onSortPizzas={onSortPizzas}
+            activeSortType={sortBy.type}
+            onSortPizzas={onSelectSortType}
             items={[
-              { name: 'популярности', type: 'rating', order: 'desc' },
-              { name: 'цене', type: 'priceSort', order: 'desc' },
+              { name: 'популярности', type: 'popular', order: 'desc' },
+              { name: 'цене', type: 'price', order: 'desc' },
               { name: 'алфавит', type: 'name', order: 'asc' },
             ]}
           />
@@ -79,7 +93,7 @@ const Content = () => {
         <h2 className="content__title">Все пиццы</h2>
         <div className="content__items">
           {isLoaded
-            ? filterResult.map((obj) => (
+            ? items.map((obj) => (
                 <PizzaCard
                   onClickAddPizza={handleAddPizzaToCart}
                   key={obj.id}

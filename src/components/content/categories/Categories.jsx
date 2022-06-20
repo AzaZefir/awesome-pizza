@@ -6,13 +6,13 @@ const Categories = ({ items, onClickItem, filterResult }) => {
   const onSelectItem = (index) => {
     setActiveItem(index);
     onClickItem(index);
-    filterResult(index);
+    // filterResult(index);
   };
 
   return (
     <div className="categories">
       <ul>
-        <li className={activeItem === '' ? 'active' : ''} onClick={() => onSelectItem('')}>
+        <li className={activeItem === '' ? 'active' : null} onClick={() => onSelectItem(null)}>
           Все
         </li>
         {items.map((item, index) => (
